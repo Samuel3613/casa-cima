@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Casa Cima - Repuestos de Autopartes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        p {
+            text-align: justify;
+        }
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            outline: none;
+            transition: border-color 0.2s;
+            color: #4b5563;
+        }
+        .form-input::placeholder {
+            color: #9ca3af;
+        }
+        .form-input:focus {
+            border-color: #0073bc;
+        }
+        .bg-cima-blue {
+            background-color: #0073bc;
+        }
+        .text-cima-blue {
+            color: #0073bc;
+        }
+        .hero-gradient {
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?q=80&w=2000&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+        }
+        .captcha-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 20px;
+            margin-bottom: 25px;
+            flex-wrap: nowrap;
+        }
+        .captcha-display {
+            background-color: #e5e7eb;
+            color: #374151;
+            padding: 8px 18px;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            font-size: 1.25rem;
+            letter-spacing: 5px;
+            text-decoration: line-through;
+            user-select: none;
+            border-radius: 0;
+            min-width: 120px;
+            text-align: center;
+            font-style: italic;
+            border: 1px solid #d1d5db;
+            flex-shrink: 0;
+        }
+        .refresh-icon {
+            color: #0073bc;
+            cursor: pointer;
+            font-size: 1.4rem;
+            transition: transform 0.4s ease;
+            flex-shrink: 0;
+        }
+        .refresh-icon:hover {
+            transform: rotate(180deg);
+        }
+        .captcha-input {
+            border: 1px solid #d1d5db;
+            padding: 10px 15px;
+            border-radius: 4px;
+            width: 100%;
+            max-width: 150px;
+            outline: none;
+            color: #4b5563;
+            font-size: 1rem;
+        }
+        @media (max-width: 480px) {
+            .captcha-wrapper {
+                gap: 8px;
+            }
+            .captcha-display {
+                min-width: 100px;
+                font-size: 1.1rem;
+                padding: 6px 12px;
+            }
+            .captcha-input {
+                max-width: 110px;
+                padding: 8px 10px;
+            }
+        }
+        .map-container {
+            position: relative;
+            padding-bottom: 60%; 
+            height: 0;
+            overflow: hidden;
+            border-radius: 0.5rem;
+        }
+        .map-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .marquee-container {
+            overflow: hidden;
+            white-space: nowrap;
+            background: #94a3b8;
+            padding: 40px 0;
+            border-top: 1px solid #64748b;
+            border-bottom: 1px solid #64748b;
+            position: relative;
+        }
+        .marquee-content {
+            display: inline-block;
+            animation: marquee 40s linear infinite;
+        }
+        .brand-box {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            width: 160px;
+            height: 120px;
+            margin: 0 20px;
+            background: #cbd5e1;
+            border: 1px solid #64748b;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            padding: 12px;
+            vertical-align: middle;
+        }
+        .brand-box:hover {
+            transform: translateY(-5px);
+            border-color: #0073bc;
+            background: #f1f5f9;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+        }
+        .brand-logo-container {
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+        .brand-logo-img {
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+        }
+        .brand-name {
+            margin-top: auto;
+            font-weight: 800;
+            color: #0f172a;
+            font-size: 0.7rem;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            text-align: center;
+            width: 100%;
+            display: block;
+        }
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 font-sans text-slate-900">
+
+    <header class="bg-[#000000] shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-2 flex justify-between items-center">
+            <div class="flex items-center">
+                <img src="Logo.jpeg" alt="Casa Cima Autopartes" class="h-16 md:h-20 w-auto object-contain">
+            </div>
+            <nav class="hidden md:flex space-x-10 font-bold text-white uppercase text-[12px] tracking-widest">
+                <a href="#inicio" class="hover:text-cima-blue transition">Inicio</a>
+                <a href="#nosotros" class="hover:text-cima-blue transition">Nosotros</a>
+                <a href="#tienda" class="hover:text-cima-blue transition">Tienda</a>
+                <a href="#cotizacion" class="hover:text-cima-blue transition">Cotización</a>
+                <a href="#contacto" class="hover:text-cima-blue transition">Contacto</a>
+            </nav>
+            <button class="md:hidden text-white text-3xl" id="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <section id="inicio" class="hero-gradient h-[500px] flex items-center justify-center text-center text-white px-4">
+        <div class="max-w-4xl">
+            <h2 class="text-4xl md:text-7xl font-black mb-6 leading-tight uppercase text-shadow-xl">Repuestos de Calidad</h2>
+            <p class="text-lg md:text-2xl mb-10 opacity-95 max-w-2xl mx-auto font-light !text-center text-justify md:text-center">Especialistas en autopartes para vehículos asiáticos con el mejor asesoramiento personalizado.</p>
+            <div class="flex justify-center">
+                <a href="#cotizacion" class="bg-cima-blue hover:bg-blue-700 text-white font-black py-5 px-12 rounded-lg transition-all shadow-2xl uppercase tracking-widest">
+                    Solicitar Cotización
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-24 bg-white" id="nosotros">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto text-center mb-16">
+                <h2 class="text-2xl md:text-4xl font-black text-cima-blue uppercase mb-6 leading-tight">La solución a tu búsqueda de repuestos</h2>
+                <p class="text-lg md:text-xl text-slate-600 leading-relaxed">
+                    Somos especialistas en <strong>vehículos asiáticos</strong>, ofrecemos repuestos genuinos y alternativos de alta calidad para vehículos <strong>chinos, coreanos y japoneses</strong>. Nuestro equipo de especialistas está para orientarte en la búsqueda de la opción que mejor se adapte a tus necesidades.
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-16 text-center">
+                <div>
+                    <div class="w-20 h-20 bg-blue-50 rounded-2xl flex items-center justify-center mx-auto mb-8">
+                        <i class="fas fa-certificate text-cima-blue text-3xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-black mb-4 uppercase">Piezas Originales</h3>
+                    <p class="text-slate-500">Garantizamos la durabilidad trabajando con las marcas líderes a nivel mundial para que tu vehículo mantenga su rendimiento óptimo por mucho más tiempo.</p>
+                </div>
+                <div>
+                    <div class="w-20 h-20 bg-blue-50 rounded-2xl flex items-center justify-center mx-auto mb-8">
+                        <i class="fas fa-truck-moving text-cima-blue text-3xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-black mb-4 uppercase">Envíos Rápidos</h3>
+                    <p class="text-slate-500">Logística ágil y eficiente para que tu repuesto llegue a tiempo donde lo necesites. Despachamos pedidos diariamente a todo el territorio nacional.</p>
+                </div>
+                <div>
+                    <div class="w-20 h-20 bg-blue-50 rounded-2xl flex items-center justify-center mx-auto mb-8">
+                        <i class="fas fa-user-check text-cima-blue text-3xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-black mb-4 uppercase">Atención Experta</h3>
+                    <p class="text-slate-500">Te ayudamos a identificar la pieza exacta para evitar errores en tu compra. Contamos con técnicos capacitados para brindarte la mejor orientación técnica.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="bg-slate-50 py-12">
+        <div class="container mx-auto px-4 mb-10 text-center">
+            <h2 class="text-xl md:text-3xl font-black text-slate-800 uppercase tracking-tight leading-tight">Trabajamos con estas marcas líderes:</h2>
+            <div class="w-24 h-1 bg-cima-blue mx-auto mt-4"></div>
+        </div>
+        <div class="marquee-container">
+            <div class="marquee-content" id="brandMarquee">
+            </div>
+        </div>
+    </section>
+
+    <section id="tienda" class="py-24 bg-white">
+        <div class="container mx-auto px-4 text-center">
+            <div class="max-w-4xl mx-auto bg-slate-100 p-12 rounded-3xl shadow-xl border border-slate-200">
+                <div class="flex justify-center mb-6">
+                    <div class="bg-[#FFF159] p-4 rounded-2xl shadow-sm">
+                        <img src="https://http2.mlstatic.com/frontend-assets/ml-web-navigation/ui-navigation/5.21.22/mercadolibre/logo__large_plus.png" alt="Mercado Libre" class="h-8 md:h-10">
+                    </div>
+                </div>
+                <h2 class="text-3xl md:text-4xl font-black text-slate-800 uppercase mb-4 tracking-tighter">Nuestra Tienda Online</h2>
+                <p class="text-slate-600 text-lg md:text-xl mb-10 max-w-2xl mx-auto !text-center">Encontrá nuestro catálogo completo con envíos a todo el país y la seguridad de Mercado Libre.</p>
+                <a href="https://listado.mercadolibre.com.ar/_CustId_3175844770" target="_blank" class="inline-block bg-[#3483FA] hover:bg-[#2968c8] text-white font-bold py-5 px-14 rounded-xl transition-all text-xl md:text-2xl uppercase tracking-widest shadow-lg shadow-blue-500/20">
+                    Ir a Mercado Libre
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section id="cotizacion" class="py-24 bg-slate-50">
+        <div class="container mx-auto px-4 max-w-4xl">
+            <div class="text-center mb-12">
+                <h2 class="text-cima-blue text-3xl md:text-4xl font-black uppercase tracking-tight">SOLICITÁ TU COTIZACIÓN</h2>
+            </div>
+            
+            <div class="bg-white shadow-2xl rounded-xl p-8 md:p-14 border border-slate-200">
+                <form id="quoteForm">
+                    <div class="space-y-2">
+                        <input type="text" id="nombre" name="Nombre" placeholder="Nombre" class="form-input" required>
+                        <input type="email" id="email" name="Email" placeholder="Email" class="form-input" required>
+                        <input type="tel" id="telefono" name="Telefono" placeholder="Teléfono" class="form-input" required>
+                        <textarea id="mensaje" name="Mensaje" placeholder="¿Qué repuesto buscás? Describe el síntoma o la pieza..." class="form-input h-44 resize-none" required></textarea>
+                    </div>
+
+                    <div class="captcha-wrapper">
+                        <div id="captchaBox" class="captcha-display">----</div>
+                        <div onclick="generateCaptcha()" class="refresh-icon">
+                            <i class="fas fa-sync-alt"></i>
+                        </div>
+                        <input type="text" id="userCaptcha" placeholder="Ingresá" class="captcha-input" required>
+                    </div>
+                    <p id="captchaError" class="text-red-600 text-sm font-bold text-center mb-6 hidden">Código incorrecto.</p>
+
+                    <button type="submit" id="submitBtn" class="w-full bg-cima-blue hover:bg-blue-800 text-white font-black py-4 rounded-lg transition-all text-xl uppercase flex justify-center items-center shadow-lg">
+                        <span>Enviar</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <section id="contacto" class="py-24 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col lg:flex-row gap-20 items-center">
+                <div class="lg:w-1/2">
+                    <h3 class="text-4xl font-black mb-12 border-l-8 border-cima-blue pl-6 uppercase tracking-tighter text-slate-800">Contacto</h3>
+                    <div class="space-y-10 text-lg">
+                        <div class="flex items-start space-x-6">
+                            <div class="text-cima-blue text-2xl mt-1"><i class="fas fa-map-marker-alt"></i></div>
+                            <div>
+                                <p class="font-black uppercase mb-1 text-slate-800">Ubicación</p>
+                                <p class="text-slate-600 text-justify">General Juan Álvarez de Arenales 267, Morón</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-6">
+                            <div class="bg-green-50 p-4 rounded-xl text-green-600 text-2xl mt-1"><i class="fab fa-whatsapp"></i></div>
+                            <div>
+                                <p class="font-black uppercase mb-1 text-slate-800">WhatsApp Ventas</p>
+                                <p class="text-slate-600">11 2469-0540</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-6">
+                            <div class="text-cima-blue text-2xl mt-1"><i class="fas fa-envelope"></i></div>
+                            <div>
+                                <p class="font-black uppercase mb-1 text-slate-800">Email Administración</p>
+                                <p class="text-slate-600 text-justify">administracion@casacima.net</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="lg:w-1/2 w-full">
+                    <div class="map-container shadow-2xl border-4 border-white">
+                        <iframe 
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3282.263884803762!2d-58.6254148!3d-34.6480112!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95bcb89689f417b7%3A0xc49d0172e259ec5e!2sGral.%20Juan%20%C3%81lvarez%20de%20Arenales%20267%2C%20B1708%20Mor%C3%B3n%2C%20Provincia%20de%20Buenos%20Aires!5e0!3m2!1ses-419!2sar!4v1709915000000!5m2!1ses-419!2sar" 
+                            style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-[#000000] text-white py-16">
+        <div class="container mx-auto px-4 text-center">
+            <img src="Logo.jpeg" alt="Logo" class="h-20 mx-auto mb-10 object-contain">
+            <p class="text-slate-400 max-w-md mx-auto mb-4 text-lg !text-center text-justify md:text-center">El mejor servicio de autopartes en la zona oeste. Asesoramiento técnico real.</p>
+            <p class="text-slate-400 max-w-md mx-auto mb-4 text-lg !text-center text-justify md:text-center">administracion@casacima.net</p>
+            <div class="border-t border-slate-800 pt-10 text-xs text-slate-600 uppercase tracking-widest">
+                &copy; 2026 Casa Cima Autopartes. Todos los derechos reservados.
+            </div>
+        </div>
+    </footer>
+
+    <a href="https://wa.me/541124690540" target="_blank" class="fixed bottom-10 right-10 bg-green-500 hover:bg-green-600 text-white w-20 h-20 rounded-full flex items-center justify-center text-4xl shadow-2xl transition-all hover:scale-110 z-50">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <script>
+        const brands = [
+            { name: "BAIC", logo: "https://baic.com.ar/wp-content/uploads/2024/06/Logo-Web-Baic-Jun2024.png" },
+            { name: "BYD", logo: "https://www.byd.com/static_material/byd/overseas/public-icon/logo.svg" },
+            { name: "CHANGAN", logo: "https://changan.com.ar/_next/image?url=%2Fchangan-logo.webp&w=128&q=75" },
+            { name: "CHERY", logo: "https://chery.com.ar/wp-content/uploads/2025/06/Capa_1-1.png" },
+            { name: "DAIHATSU", logo: "https://acdn-us.mitiendanube.com/stores/006/195/838/themes/common/logo-1045371503-1746624452-50eba149e71bfee25b91fd8dd795a1581746624452-640-0.webp" },
+            { name: "DFM", logo: "https://www.dfmargentina.com.ar/assets/web/img/logo/DFM%20COLOR.png" },
+            { name: "DFSK", logo: "https://dfsk.ar/wp-content/uploads/al_opt_content/IMAGE/dfsk.ar/wp-content/uploads/2025/08/DFSK_logotipo-02-1024x339.png.bv.webp?bv_host=dfsk.ar" },
+            { name: "FAW", logo: "https://www.faw.com/fawen/template/common/header/english_logo.png?timestamp=1532076898248" },
+            { name: "FOTON", logo: "https://foton.com.ar/wp-content/uploads/2024/01/FOTON-CIS-Manual.pdf-1024x577.png" },
+            { name: "GAC", logo: "https://framerusercontent.com/images/62T0DAa6WYBEJogD9FtQHrlsY.png?width=340&height=73" },
+            { name: "GEELY", logo: "https://geelyargentina.com.ar/_next/image/?url=%2Flogos%2Flogo-dark.webp&w=3840&q=75" },
+            { name: "HAVAL", logo: "https://gwm.com.ar/logo-GWM-footer.svg" },
+            { name: "HONDA", logo: "https://www.honda.com.ar/img/honda_logo.jpg" },
+            { name: "HYUNDAI", logo: "https://www.hyundai-rama.com.ar/wp-content/uploads/2018/07/hyundaiLogo.jpg" },
+            { name: "JAC", logo: "https://jacargentina.com.ar/wp-content/themes/jacmotors/imgs/logo.png" },
+            { name: "JETOUR", logo: "https://jetour.com.ar/wp-content/uploads/2025/07/Jetour-Blanco.svg" },
+            { name: "JMEV", logo: "https://jmevargentina.com.ar/_next/image?url=%2FJMEV-Logo.png&w=1920&q=75" },
+            { name: "LIFAN", logo: "https://i0.wp.com/www.americanlifan.com/wp-content/uploads/2022/06/logo.png?fit=218%2C45&ssl=1" },
+            { name: "KIA", logo: "https://www.kia.com.ar/static/media/Kia.24a1fffcb6a97741a57f1aba0041b555.svg" },
+            { name: "MG", logo: "https://www.mgmotor.com.mx/assets/mg-logo-white-D51yVV8w.svg" },
+            { name: "MITSUBISHI", logo: "https://www.mitsubishi-motors.com.ar/Mitsubishi_motors_new_logo.svg" },
+            { name: "NISSAN", logo: "https://www.nissan-global.com/library/assets/img/hd_logo.svg" },
+            { name: "PROTON", logo: "https://cms-assets.proton.com/proton-cms-blob/media/mlvmigt0/proton-logo.png" },
+            { name: "SHINERAY", logo: "https://www.shineray.com.ar/templates/yootheme/cache/cd/logo_pc-cd1569d9.webp" },
+            { name: "GWM", logo: "https://gwm.com.ar/logo-GWM-footer.svg" },
+            { name: "SUBARU", logo: "https://www.subaru.com.ar/subaru/site/artic/20190425/imag/foto_0000000520190425171138/foto_0000000120221108103419_foto.png" },
+            { name: "SUZUKI", logo: "https://www.suzuki.com.ar/media/unkhk1r2/logo-suzuki.png" },
+            { name: "TOYOTA", logo: "https://www.toyota.com.ar/images/logos/logo-toyota.svg" },
+            { name: "ZANELLA", logo: "https://zanellaglobal.com/ar/wp-content/uploads/2025/07/logo-zanella.png" }
+        ];
+
+        function initMarquee() {
+            const container = document.getElementById('brandMarquee');
+            const allBrands = [...brands, ...brands];
+            
+            allBrands.forEach(brand => {
+                const box = document.createElement('div');
+                box.className = 'brand-box';
+                box.innerHTML = `
+                    <div class="brand-logo-container">
+                        <img src="${brand.logo}" alt="${brand.name}" class="brand-logo-img" onerror="this.src='https://via.placeholder.com/80x40?text=${brand.name}'">
+                    </div>
+                    <span class="brand-name">${brand.name}</span>
+                `;
+                container.appendChild(box);
+            });
+        }
+
+        let currentCaptcha = "";
+        function generateCaptcha() {
+            const digits = "0123456789";
+            let code = "";
+            for (let i = 0; i < 4; i++) code += digits.charAt(Math.floor(Math.random() * digits.length));
+            currentCaptcha = code;
+            document.getElementById('captchaBox').innerText = code.split('').join(' ');
+            document.getElementById('userCaptcha').value = "";
+            document.getElementById('captchaError').classList.add('hidden');
+        }
+
+        window.onload = function() {
+            generateCaptcha();
+            initMarquee();
+        };
+
+        document.getElementById('quoteForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            if (document.getElementById('userCaptcha').value.trim().replace(/\s/g, '') !== currentCaptcha) {
+                document.getElementById('captchaError').classList.remove('hidden');
+                generateCaptcha();
+                return;
+            }
+            const nombre = document.getElementById('nombre').value;
+            const email = document.getElementById('email').value;
+            const telefono = document.getElementById('telefono').value;
+            const mensaje = document.getElementById('mensaje').value;
+            const whatsappMsg = `Hola Casa Cima! Quiero realizar una cotización.%0A%0A*Nombre:* ${nombre}%0A*Email:* ${email}%0A*Teléfono:* ${telefono}%0A*Consulta:* ${mensaje}`;
+            window.open(`https://wa.me/541124690540?text=${whatsappMsg}`, '_blank');
+            this.reset();
+            generateCaptcha();
+        });
+
+        document.getElementById('menu-toggle').addEventListener('click', () => {
+            const nav = document.querySelector('nav');
+            nav.classList.toggle('hidden');
+            nav.classList.toggle('flex');
+            nav.classList.toggle('flex-col');
+            nav.classList.toggle('absolute');
+            nav.classList.toggle('top-full');
+            nav.classList.toggle('left-0');
+            nav.classList.toggle('w-full');
+            nav.classList.toggle('bg-black');
+            nav.classList.toggle('p-8');
+            nav.classList.toggle('text-center');
+            nav.classList.toggle('space-y-4');
+        });
+    </script>
+</body>
+</html>
